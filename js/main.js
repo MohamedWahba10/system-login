@@ -1,138 +1,93 @@
-let signup = document.querySelector("#signup");
-let signin = document.querySelector("#signin");
-let name = document.querySelector("#name");
-let Loginbtn = document.querySelector("#Loginbtn");
-let Signupbtn = document.querySelector("#Signupbtn");
-let LightBoxContainer = document.querySelector("#LightBoxContainer");
-let alertinputs = document.querySelector("#alertinputs")
-const userWelcomeEle = document.getElementById("user-welcome");
-let Succesinputs=document.querySelector("#Succesinputs");
-let email = document.querySelector("#email");
-let password = document.querySelector("#password");
-let username = document.querySelector("#username");
-let SignOutbtn=document.querySelector("#SignOut");
-let InformationsList = [];
+$(".openNav").click(function () {
 
+  $("#navbar").removeClass("d-none").hide().fadeIn(500);
 
+  // $("#navbar").animate({ display: "block" }, 1000);
 
-
-const savedInformations = localStorage.getItem("informationsList");
-if (savedInformations) {
-    InformationsList = JSON.parse(savedInformations);
-}
-
-
-
-Signupbtn.addEventListener("click", function () {
-
-
-
-    if (email.value.trim() === "" || password.value.trim() === "") { // Handle the case where either email or password input is empty
-
-        emptyinputs.classList.replace("d-none", "d-block");
-        return;
-    } else {
-        Succesinputs.classList.replace("d-none", "d-block");
-
-    
-    
-    let Informations = {
-        username: username.value,
-        email: email.value,
-        password: password.value
-
-
-    }
-
-    InformationsList.push(Informations);
-
-    clear();
-
-    localStorage.setItem("informationsList", JSON.stringify(InformationsList));
-}
 })
 
-Loginbtn.addEventListener("click", function () {
-
-    if (email.value.trim() === "" || password.value.trim() === "") { // Handle the case where either email or password input is empty
-
-        emptyinputs.classList.replace("d-none", "d-block");
-        return;
-    }
-   
-    for (let i = 0; i < InformationsList.length; i++) {
+$(".nav-icon").click(function () {
+  $("#navbar").addClass("d-none")
+});
 
 
-        if (email.value == InformationsList[i].email && password.value == InformationsList[i].password) {
+// $(".container .row .col-md-5 #Singerone").click(function(){
 
-            LightBoxContainer.classList.replace("d-none", "d-block");
-            userWelcomeEle.innerHTML = `Welcome ${username.value}`
+//  $("#inner1").slideToggle();
 
-        } else {
 
-            alertinputs.classList.replace("d-none", "d-block");
+// });
 
-        }
 
-    }
-    localStorage.setItem("informationsList", JSON.stringify(InformationsList));
-})
+$('#sliderDown .toggle').click(function () {
+  $('.inner').not($(this).next()).slideUp(500);
+  $(this).next().slideToggle(500);
+});
+
+
+//This part of the code waits for the window (web page) to be fully loaded before executing the specified function.
 
 
 
+window.onload = function () {
 
-function clear() {
-    
-    email.value = ""
-    password.value = ""
+  countDownToTime("25 october 2023 10:00:00");
+}    //This part of the code waits for the window (web page) to be fully loaded before executing the specified function.
+
+function countDownToTime(countTo) {
+
+  let futureDate = new Date(countTo);
+  futureDate = (futureDate.getTime() / 1000);
+  //It converts the countTo string into a Date object using new Date(countTo). The date is then converted to Unix timestamp in seconds by dividing it by 1000.
+  let now = new Date();
+  now = (now.getTime() / 1000); //It gets the current date and time and converts it to a Unix timestamp in seconds.
+
+  timeDifference = (futureDate - now);
+
+  let days = Math.floor(timeDifference / (24 * 60 * 60));
+  let hours = Math.floor((timeDifference - (days * (24 * 60 * 60))) / 3600);
+  let mins = Math.floor((timeDifference - (days * (24 * 60 * 60)) - (hours * 3600)) / 60);
+  let secs = Math.floor((timeDifference - (days * (24 * 60 * 60)) - (hours * 3600) - (mins * 60)))
+
+
+  $(".days").html(`${days} D`);
+  $(".hours").html(`${hours} h`);
+  $(".minutes").html(`${mins} m`);
+  $('.seconds').html(`${secs} s`)
+
+
+  setInterval(function () { countDownToTime(countTo); }, 1000);
+  // This causes the countdown to update every 1 second.
 }
 
 
-signup.addEventListener("click", function () {
 
+let maxChar = 100;
+$("#chars").html(maxChar);
 
-    name.classList.replace("d-none", "d-block");
-    Loginbtn.classList.add("d-none");
-    Signupbtn.classList.replace("d-none", "d-block");
-    signin.classList.remove("d-none");
-    signup.classList.add("d-none");
+$(".EnterMessage").keyup(function () {
+  let currentChar = $(".EnterMessage").val().length;
+  if (currentChar >= 101) {
+    $("#chars").html("Your available character limit has been reached").css("color", "red");
 
+  } else {
+    let remainingChar = maxChar - currentChar;
+    $("#chars").html(remainingChar);
+  }
 });
 
-signin.addEventListener("click", function () {
 
-
-    name.classList.replace("d-block", "d-none");
-    Loginbtn.classList.replace("d-none", "d-block");
-    Signupbtn.classList.replace("d-block", "d-none");
-    signin.classList.add("d-none");
-    signup.classList.remove("d-none");
-    Succesinputs.classList.add("d-none");
-    emptyinputs.classList.add("d-none");
-
-});
-
-SignOutbtn.addEventListener("click",function(){
-
-    localStorage.removeItem("informationsList");
-
-    LightBoxContainer.classList.add("d-none");
-
-}) 
+// $("a[href^='#']").click(function (e) {
+//   let href = $(this).attr("href");
+//   let section = $(href).offset().top;
+//   $("body").animate({ scrollTop: section }, 3000);
+// });
+// to run this we must remove smooth-behaviour from bootstrap
 
 
 
 
 
 
-// function ValidateEmail() {
-
-//     let regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
-//     if (regex.test(email.value) == false) {
-
-//         return false;
-//     }
 
 
-// }
